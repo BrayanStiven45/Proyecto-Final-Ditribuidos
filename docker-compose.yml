@@ -245,7 +245,7 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
 
-  # ---------- MINIO DISTRIBUIDO 4 NODOS ----------
+  # ---------- MINIO INDEPENDIENTE (NO DISTRIBUIDO) ----------
   minio1:
     image: minio/minio:latest
     container_name: minio1
@@ -254,9 +254,10 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    command: server http://minio{1...4}/data --console-address ":9001"
+    command: server /data --console-address ":9001"
     ports:
       - "9001:9001"
+      - "9000:9000"
 
   minio2:
     image: minio/minio:latest
@@ -266,7 +267,10 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    command: server http://minio{1...4}/data --console-address ":9001"
+    command: server /data --console-address ":9002"
+    ports:
+      - "9002:9002"
+      - "9003:9000"
 
   minio3:
     image: minio/minio:latest
@@ -276,7 +280,10 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    command: server http://minio{1...4}/data --console-address ":9001"
+    command: server /data --console-address ":9003"
+    ports:
+      - "9003:9003"
+      - "9004:9000"
 
   minio4:
     image: minio/minio:latest
@@ -286,7 +293,10 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    command: server http://minio{1...4}/data --console-address ":9001"
+    command: server /data --console-address ":9004"
+    ports:
+      - "9004:9004"
+      - "9005:9000"
 
 volumes:
   minio1_data:
