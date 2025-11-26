@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Archivos Distribuido</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-cloud"></i>
+                <h1>Distributed File System</h1>
+            </div>
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Usuario</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h2>Arrastra y suelta archivos aquí</h2>
+                    <p>o haz clic para seleccionar</p>
+                    <input type="file" id="fileInput" multiple hidden>
+                    <button class="btn btn-primary" id="selectFileBtn">
+                        <i class="fas fa-folder-open"></i> Seleccionar Archivos
+                    </button>
+                </div>
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-info">
+                        <span id="uploadFileName">archivo.txt</span>
+                        <span id="uploadPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Files List Section -->
+            <section class="files-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-folder"></i> Mis Archivos</h2>
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                        <input type="text" class="search-input" placeholder="Buscar archivos..." id="searchInput">
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <div class="files-grid" id="filesGrid">
+                    <!-- Sample files - estos serán generados dinámicamente -->
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-info">
+                            <h3 class="file-name">documento.pdf</h3>
+                            <p class="file-size">2.5 MB</p>
+                            <p class="file-date">25 Nov 2025</p>
+                        </div>
+                        <div class="file-actions">
+                            <button class="action-btn" title="Ver">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn" title="Descargar">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn delete" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <div class="file-info">
+                            <h3 class="file-name">imagen.png</h3>
+                            <p class="file-size">1.8 MB</p>
+                            <p class="file-date">24 Nov 2025</p>
+                        </div>
+                        <div class="file-actions">
+                            <button class="action-btn" title="Ver">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn" title="Descargar">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn delete" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-file-word"></i>
+                        </div>
+                        <div class="file-info">
+                            <h3 class="file-name">reporte.docx</h3>
+                            <p class="file-size">456 KB</p>
+                            <p class="file-date">23 Nov 2025</p>
+                        </div>
+                        <div class="file-actions">
+                            <button class="action-btn" title="Ver">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn" title="Descargar">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn delete" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-file-archive"></i>
+                        </div>
+                        <div class="file-info">
+                            <h3 class="file-name">backup.zip</h3>
+                            <p class="file-size">15.2 MB</p>
+                            <p class="file-date">22 Nov 2025</p>
+                        </div>
+                        <div class="file-actions">
+                            <button class="action-btn" title="Ver">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn" title="Descargar">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn delete" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>No hay archivos</h3>
+                    <p>Sube tu primer archivo para comenzar</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Statistics -->
+        <aside class="stats-sidebar">
+            <div class="stats-card">
+                <i class="fas fa-hdd"></i>
+                <div class="stats-info">
+                    <h3>Almacenamiento</h3>
+                    <p class="stats-value">19.9 GB <span class="stats-total">/ 50 GB</span></p>
+                    <div class="storage-bar">
+                        <div class="storage-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-card">
+                <i class="fas fa-file"></i>
+                <div class="stats-info">
+                    <h3>Total de Archivos</h3>
+                    <p class="stats-value">128</p>
+                </div>
+            </div>
+            <div class="stats-card">
+                <i class="fas fa-server"></i>
+                <div class="stats-info">
+                    <h3>Nodos Activos</h3>
+                    <p class="stats-value">3/3</p>
+                    <div class="nodes-status">
+                        <span class="node-indicator active"></span>
+                        <span class="node-indicator active"></span>
+                        <span class="node-indicator active"></span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="previewFileName">Vista Previa</h2>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Content will be loaded dynamically -->
+                <div class="preview-placeholder">
+                    <i class="fas fa-file"></i>
+                    <p>Cargando vista previa...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
