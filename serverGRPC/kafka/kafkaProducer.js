@@ -1,5 +1,5 @@
 // kafka/kafkaProducer.js
-import kafka from "kafkajs";
+import { Kafka } from "kafkajs";
 
 
 const kafka = new Kafka({

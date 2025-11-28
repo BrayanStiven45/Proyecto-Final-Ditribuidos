@@ -94,7 +94,6 @@ async function main() {
     grpc.ServerCredentials.createInsecure(),
     () => {
       console.log("gRPC server corriendo en puerto 5000");
-      server.start();
     }
   );
 }

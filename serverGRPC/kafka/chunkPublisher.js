@@ -1,11 +1,11 @@
 // kafka/chunkPublisher.js
-const { producer } = require("./kafkaProducer");
+import { producer } from './kafkaProducer.js';
 
-const NUM_PARTITION = 4;
+export const NUM_PAIRS = 2;
 const TOPIC = "file-chunks";
 
-async function publishChunk(fileId, chunkIndex, totalChunks, chunkBuffer) {
-  const partition = chunkIndex % NUM_PARTITION;
+export async function publishChunk(fileId, chunkIndex, totalChunks, chunkBuffer) {
+  const partition = chunkIndex % NUM_PAIRS;
 
   const payload = {
     fileId,
@@ -28,4 +28,3 @@ async function publishChunk(fileId, chunkIndex, totalChunks, chunkBuffer) {
   console.log(`Chunk ${chunkIndex}/${totalChunks} enviado → partición ${partition}`);
 }
 
-module.exports = { publishChunk, NUM_PAIRS };
