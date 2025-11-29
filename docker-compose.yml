@@ -30,3 +30,46 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  minio1:
+    image: minio/minio
+    container_name: minio1
+    command: server /data --console-address ":9001"
+    ports:
+      - "9001:9000"   # API S3
+      - "9101:9001"   # Consola web
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio1-data:/data
+
+  minio2:
+    image: minio/minio
+    container_name: minio2
+    command: server /data --console-address ":9001"
+    ports:
+      - "9002:9000"
+      - "9102:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio2-data:/data
+
+  # minio3:
+  #   image: minio/minio
+  #   container_name: minio3
+  #   command: server /data --console-address ":9003"
+  #   ports:
+  #     - "9003:9000"
+  #     - "9103:9001"
+  #   environment:
+  #     MINIO_ROOT_USER: minioadmin
+  #     MINIO_ROOT_PASSWORD: minioadmin
+  #   volumes:
+  #     - minio3-data:/data
+
+volumes:
+  minio1-data:
+  minio2-data:

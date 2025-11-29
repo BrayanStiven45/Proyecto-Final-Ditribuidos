@@ -1,5 +1,5 @@
 // utils/chunker.js
-export const CHUNK_SIZE = 16 * 1024 * 1024; // 16 MB
+export const CHUNK_SIZE = 50 * 1024; // 16 MB
 
 export function splitIntoChunks(buffer) {
   const chunks = [];

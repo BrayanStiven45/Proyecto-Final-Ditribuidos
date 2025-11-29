@@ -1,9 +1,9 @@
 import { consumer } from "./kafkaConsumer.js";
+import { uploadChunkToMinio } from "./minioUploader.js";
+import { isStorageAvailable, ensureFailover } from "./minioFailoverClient.js";
 
 const TOPIC = "file-chunks";
-
-// Estructura temporal para rearmar archivos
-const fileBuffers = new Map();
+let isPaused = false;
 
 export async function startChunkConsumer() {
   await consumer.subscribe({
@@ -12,43 +12,31 @@ export async function startChunkConsumer() {
   });
 
   await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
+    autoCommit: true,
+    eachMessage: async ({ message }) => {
+
+      await ensureFailover();
+
+      if (!isStorageAvailable()) {
+        if (!isPaused) {
+          console.log("⏸ Consumer pausado — NO hay MinIO disponible");
+          consumer.pause([{ topic: TOPIC }]);
+          isPaused = true;
+        }
+        return;
+      }
+
+      if (isPaused) {
+        console.log("▶️ Consumer reanudado — hay MinIO disponible");
+        consumer.resume([{ topic: TOPIC }]);
+        isPaused = false;
+      }
+
       const data = JSON.parse(message.value.toString());
-
-      const {
-        fileId,
-        chunkIndex,
-        totalChunks,
-        data: chunkBase64,
-      } = data;
-
+      const { fileId, chunkIndex, data: chunkBase64 } = data;
       const buffer = Buffer.from(chunkBase64, "base64");
 
-      if (!fileBuffers.has(fileId)) {
-        fileBuffers.set(fileId, {
-          chunks: new Array(totalChunks),
-          received: 0,
-        });
-      }
-
-      const fileEntry = fileBuffers.get(fileId);
-
-      fileEntry.chunks[chunkIndex] = buffer;
-      fileEntry.received++;
-
-      console.log(
-        `📦 Chunk recibido: ${chunkIndex + 1}/${totalChunks} (Partición ${partition})`
-      );
-
-      // Cuando llega el archivo completo
-      if (fileEntry.received === totalChunks) {
-        const finalBuffer = Buffer.concat(fileEntry.chunks);
-
-        console.log(`✅ Archivo completo reconstruido. Tamaño: ${finalBuffer.length} bytes`);
-
-        // Aquí puedes: guardarlo en disco, S3, DB, etc.
-        fileBuffers.delete(fileId);
-      }
+      await uploadChunkToMinio(fileId, chunkIndex, buffer);
     },
   });
 }

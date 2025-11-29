@@ -12,6 +12,7 @@
   "type": "module",
   "dependencies": {
     "dotenv": "^17.2.3",
-    "kafkajs": "^2.2.4"
+    "kafkajs": "^2.2.4",
+    "minio": "^8.0.6"
   }
 }
