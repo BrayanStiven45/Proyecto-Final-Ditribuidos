@@ -54,4 +54,6 @@ function downloadFile(fileName) {
   call.on('end', () => console.log(`Downloaded ${fileName}`));
 }
 
-uploadFile('./test.txt');  // Example usage
+// uploadFile('./pruebaPdf.pdf');  // Example usage
+
+downloadFile('pruebaPdf.pdf')
