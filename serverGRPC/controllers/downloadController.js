@@ -1,5 +1,5 @@
 // controllers/downloadController.js
-const { getFileById, getFileByName, getChunksOrdered, getChunkReplicas } = require('../db/queries');
+const { getLatestFileByName, getFileByNameAndVersion, getChunksOrdered, getChunkReplicas } = require('../db/queries');
 const { minioClients } = require('../minio/clients');
 const { BUCKET } = require('../minio/clients');
 const { nodeStatus } = require('../services/nodePicker');
@@ -7,17 +7,24 @@ const { nodeStatus } = require('../services/nodePicker');
 async function downloadFile(call) {
   const fileNameReq = call.request.fileName || null;
   const fileIdReq = call.request.fileId || null;
+  const requestedVersion = call.request.version || null;
 
-  const fileRow = fileIdReq
-    ? getFileById.get(fileIdReq)
-    : getFileByName.get(fileNameReq);
+  let fileRow;
+  if (fileIdReq) {
+    // si cliente envía fileId, usamos directamente (útil para versiones específicas)
+    fileRow = getFileById.get(fileIdReq); // asegúrate de exportar getFileById en queries
+  } else if (fileNameReq && requestedVersion) {
+    fileRow = getFileByNameAndVersion.get(fileNameReq, requestedVersion);
+  } else if (fileNameReq) {
+    fileRow = getLatestFileByName.get(fileNameReq);
+  }
 
   if (!fileRow) {
     call.emit('error', { code: require('@grpc/grpc-js').status.NOT_FOUND, message: 'File not found' });
     return;
   }
-  const fileId = fileRow.id;
 
+  const fileId = fileRow.id;
   const chunks = getChunksOrdered.all(fileId);
 
   try {

@@ -72,6 +72,42 @@ const loadNodesByReplicaCount = db.prepare(
   'SELECT node_index, COUNT(*) as cnt FROM chunks GROUP BY node_index ORDER BY cnt DESC'
 );
 
+const getLatestFileByName = db.prepare(`
+  SELECT * FROM files
+  WHERE filename = ?
+  ORDER BY version DESC, upload_time DESC
+  LIMIT 1
+`);
+
+const getFileByNameAndVersion = db.prepare(`
+  SELECT * FROM files
+  WHERE filename = ? AND version = ?
+  LIMIT 1
+`);
+
+const listFileVersions = db.prepare(`
+  SELECT id AS fileId, version, upload_time AS uploadTime, size
+  FROM files
+  WHERE filename = ?
+  ORDER BY version DESC
+`);
+
+const listLatestFiles = db.prepare(`
+  SELECT f.filename,
+         f.version,
+         f.upload_time,
+         f.size
+  FROM files f
+  INNER JOIN (
+      SELECT filename, MAX(version) AS max_version
+      FROM files
+      GROUP BY filename
+  ) latest
+  ON f.filename = latest.filename 
+  AND f.version = latest.max_version
+  ORDER BY f.upload_time DESC
+`);
+
 module.exports = {
   db,
   insertFileStmt,
@@ -89,5 +125,9 @@ module.exports = {
   countAllReplicaRows,
   getCandidateChunksRebalance,
   getAllChunksGrouped,
-  loadNodesByReplicaCount
+  loadNodesByReplicaCount,
+  getLatestFileByName,
+  getFileByNameAndVersion,
+  listFileVersions,
+  listLatestFiles
 };

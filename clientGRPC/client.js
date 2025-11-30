@@ -1,59 +1,19 @@
-const grpc = require('@grpc/grpc-js');
-const protoLoader = require('@grpc/proto-loader');
-const fs = require('fs');
-const path = require('path');
+const {
+  uploadFile,
+  downloadFile,
+  getMetadata,
+  listVersions,
+  listFiles
+} = require('./services/fileService');
 
-const PROTO_PATH = path.resolve(__dirname, "./protos/storage.proto");
+// ========= PRUEBAS =========
 
-const PROTO_OPTIONS = {
-  keepCase: true,
-  longs: String,
-  enums: String,
-  defaults: true,
-  oneofs: true
-}
+// uploadFile('./pruebaVideo.mp4');
 
-const packageDefinition = protoLoader.loadSync(PROTO_PATH, PROTO_OPTIONS)
-const storageProto = grpc.loadPackageDefinition(packageDefinition).filestorage;
-const client = new storageProto.FileStorage('localhost:5000', grpc.credentials.createInsecure());
+// downloadFile('pruebaVideo.mp4');
 
-function uploadFile(filePath) {
-  const fileName = path.basename(filePath);
-  const stream = fs.createReadStream(filePath);
+// getMetadata('pruebaVideo.mp4');
 
-  const call = client.uploadFile((err, response) => {
-    if (err) {
-      console.error('Upload failed:', err);
-      return;
-    }
-    console.log('Server reply:', response.message);
-  });
+// listVersions('pruebaVideo.mp4');
 
-  let firstChunk = true;
-
-  stream.on('data', (chunk) => {
-    if (firstChunk) {
-      call.write({ fileData: chunk, fileName });
-      firstChunk = false;
-    } else {
-      call.write({ fileData: chunk });
-    }
-  });
-
-  stream.on('end', () => {
-    call.end();
-  });
-}
-
-
-function downloadFile(fileName) {
-  const call = client.downloadFile({ fileName });
-  const writeStream = fs.createWriteStream(`downloaded_${fileName}`);
-
-  call.on('data', (chunk) => writeStream.write(chunk.fileData));
-  call.on('end', () => console.log(`Downloaded ${fileName}`));
-}
-
-// uploadFile('./pruebaVideo.mp4');  // Example usage
-
-downloadFile('pruebaVideo.mp4')
+// listFiles();

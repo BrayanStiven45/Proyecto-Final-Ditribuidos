@@ -10,6 +10,9 @@ const { init, startHealthLoop } = require('./services/healthService');
 const { uploadFile } = require('./controllers/uploadController');
 const { downloadFile } = require('./controllers/downloadController');
 const { getMetadata } = require('./controllers/metadataController');
+const { listVersions } = require('./controllers/versionsController');
+const { listFiles } = require('./controllers/listFilesController');
+
 
 const PROTO_PATH = path.resolve(__dirname, './protos/storage.proto');
 const PROTO_OPTIONS = { keepCase: true, longs: String, enums: String, defaults: true, oneofs: true };
@@ -22,7 +25,13 @@ async function main() {
   startHealthLoop();
 
   const server = new grpc.Server();
-  server.addService(storageProto.FileStorage.service, { uploadFile, downloadFile, GetMetadata: getMetadata });
+  server.addService(storageProto.FileStorage.service, { 
+    uploadFile, 
+    downloadFile, 
+    GetMetadata: getMetadata,
+    ListVersions: listVersions,
+    ListFiles: listFiles
+  });
   const addr = process.env.GRPC_BIND || '0.0.0.0:5000';
   server.bindAsync(addr, grpc.ServerCredentials.createInsecure(), (err, port) => {
     if (err) { console.error('gRPC bind error:', err); process.exit(1); }
