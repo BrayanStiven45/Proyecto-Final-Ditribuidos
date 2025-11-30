@@ -1,13 +1,11 @@
-version: '3.8'
-
 services:
   minio1:
     image: minio/minio
     container_name: minio1
     command: server /data --console-address ":9001"
     ports:
-      - "9001:9000"   # API S3
-      - "9101:9001"   # Consola web
+      - "9001:9000"
+      - "9101:9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -17,7 +15,7 @@ services:
   minio2:
     image: minio/minio
     container_name: minio2
-    command: server /data --console-address ":9002"
+    command: server /data --console-address ":9001"
     ports:
       - "9002:9000"
       - "9102:9001"
@@ -30,7 +28,7 @@ services:
   minio3:
     image: minio/minio
     container_name: minio3
-    command: server /data --console-address ":9003"
+    command: server /data --console-address ":9001"
     ports:
       - "9003:9000"
       - "9103:9001"
@@ -40,7 +38,21 @@ services:
     volumes:
       - minio3-data:/data
 
+  minio4:
+    image: minio/minio
+    container_name: minio4
+    command: server /data --console-address ":9001"
+    ports:
+      - "9004:9000"
+      - "9104:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio4-data:/data
+
 volumes:
   minio1-data:
   minio2-data:
   minio3-data:
+  minio4-data:

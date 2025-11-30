@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package filestorage;
+
+service FileStorage {
+  // Subir archivo (si el nombre ya existe → crea nueva versión)
+  rpc UploadFile(stream FileRequest) returns (UploadResponse);
+
+  // Descargar archivo (si no se envía version → devuelve la última)
+  rpc DownloadFile(FileDownloadRequest) returns (stream FileResponse);
+
+  // Obtener metadata (si no se envía version → devuelve la última)
+  rpc GetMetadata(FileMetadataRequest) returns (MetadataResponse);
+
+  // Listar versiones disponibles de un archivo
+  rpc ListVersions(ListVersionsRequest) returns (ListVersionsResponse);
+
+  // Listar todos los archivos almacenados
+  rpc ListFiles(Empty) returns (ListFilesResponse);
+}
+
+/* ================== UPLOAD ================== */
+
+message FileRequest {
+  bytes fileData = 1;
+  string fileName = 2;
+}
+
+message UploadResponse {
+  string message = 1;
+  string fileId = 2;
+  int32 version = 3;
+}
+
+/* ================== DOWNLOAD ================== */
+
+message FileDownloadRequest {
+  string fileName = 1;
+  int32 version = 2;
+  string fileId = 3;
+}
+
+message FileResponse {
+  bytes fileData = 1;
+}
+
+/* ================== METADATA ================== */
+
+message FileMetadataRequest {
+  string fileName = 1;
+  int32 version = 2;
+}
+
+message MetadataResponse {
+  string fileName = 1;
+  string uploadTime = 2;
+  string version = 3;
+  string size = 4;
+}
+
+/* ================== VERSIONES ================== */
+
+message ListVersionsRequest {
+  string fileName = 1;
+}
+
+message VersionInfo {
+  string fileId = 1;
+  int32 version = 2;
+  string uploadTime = 3;
+  string size = 4;
+}
+
+message ListVersionsResponse {
+  repeated VersionInfo versions = 1;
+}
+
+/* ================== LISTADO GLOBAL ================== */
+
+message Empty {}
+
+message FileInfo {
+  string fileName = 1;
+  int32 latestVersion = 2;
+  string uploadTime = 3;
+  string size = 4;
+}
+
+message ListFilesResponse {
+  repeated FileInfo files = 1;
+}
