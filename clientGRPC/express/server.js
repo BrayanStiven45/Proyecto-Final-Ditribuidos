@@ -3,13 +3,22 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 
 const fileService = require('../services/fileService');
 
 const app = express();
 const PORT = 3000;
 
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(express.json());
+
 
 // Serve static files from Front directory
 app.use(express.static(path.join(__dirname, '../../Front')));
@@ -98,42 +107,42 @@ app.get('/download/:fileName', (req, res) => {
   }
 });
 
-// endpoint solo para testing
-app.get('/download-save/:fileName', async (req, res) => {
-  const { fileName } = req.params;
-  const version = req.query.version ? Number(req.query.version) : 0;
+// // endpoint solo para testing
+// app.get('/download-save/:fileName', async (req, res) => {
+//   const { fileName } = req.params;
+//   const version = req.query.version ? Number(req.query.version) : 0;
 
-  try {
-    const stream = fileService.downloadFileStream(fileName, version);
+//   try {
+//     const stream = fileService.downloadFileStream(fileName, version);
     
-    // Crear carpeta de descargas si no existe
-    const downloadDir = path.join(__dirname, '../../pruebasHTTP/descargas');
-    if (!fs.existsSync(downloadDir)) {
-      fs.mkdirSync(downloadDir, { recursive: true });
-    }
+//     // Crear carpeta de descargas si no existe
+//     const downloadDir = path.join(__dirname, '../../pruebasHTTP/descargas');
+//     if (!fs.existsSync(downloadDir)) {
+//       fs.mkdirSync(downloadDir, { recursive: true });
+//     }
     
-    const filePath = path.join(downloadDir, fileName);
-    const writeStream = fs.createWriteStream(filePath);
+//     const filePath = path.join(downloadDir, fileName);
+//     const writeStream = fs.createWriteStream(filePath);
 
-    stream.pipe(writeStream);
+//     stream.pipe(writeStream);
 
-    writeStream.on('finish', () => {
-      res.json({ 
-        message: 'Archivo descargado y guardado localmente',
-        savedTo: filePath 
-      });
-    });
+//     writeStream.on('finish', () => {
+//       res.json({ 
+//         message: 'Archivo descargado y guardado localmente',
+//         savedTo: filePath 
+//       });
+//     });
 
-    stream.on('error', (err) => {
-      console.error('Download stream error:', err);
-      res.status(500).json({ error: err.message || err });
-    });
+//     stream.on('error', (err) => {
+//       console.error('Download stream error:', err);
+//       res.status(500).json({ error: err.message || err });
+//     });
 
-  } catch (err) {
-    console.error('Download error:', err);
-    return res.status(500).json({ error: err.message || err });
-  }
-});
+//   } catch (err) {
+//     console.error('Download error:', err);
+//     return res.status(500).json({ error: err.message || err });
+//   }
+// });
 
 
 
@@ -201,10 +210,8 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`
 ╔${'═'.repeat(70)}╗`);
-  console.log(`║  🚀 Express Gateway & Frontend Server                              ║`);
+  console.log(`║  🚀 Express Gateway                                           ║`);
   console.log(`╠${'─'.repeat(70)}╣`);
-  console.log(`║  🌐 Server:   http://localhost:${PORT}${' '.repeat(42)}║`);
-  console.log(`║  📱 Frontend: http://localhost:${PORT}${' '.repeat(42)}║`);
   console.log(`║  📁 API:      http://localhost:${PORT}/files, /upload, /download  ║`);
   console.log(`╚${'═'.repeat(70)}╝
 `);

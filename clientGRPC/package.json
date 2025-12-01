@@ -5,8 +5,8 @@
   "main": "client.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node client.js",
-    "dev": "node client.js"
+    "start": "node express/server.js",
+    "dev": "node express/server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.14.1",
     "@grpc/proto-loader": "^0.8.0",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "multer": "^2.0.2"
   }
