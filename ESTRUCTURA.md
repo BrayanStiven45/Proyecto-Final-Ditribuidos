@@ -82,15 +82,15 @@ Proyecto-Final-Distribuidos/
 │   ├── 📁 protos/              # Definiciones Protocol Buffers
 │   │   └── 📄 storage.proto    # Definición de servicios gRPC
 │   │
-│   ├── 📁 services/            # Servicios de negocio
-│   │   └── 📄 fileService.js   # Lógica de manejo de archivos
-│   │
-│   └── 📁 public/              # Frontend (NUEVO)
-│       ├── 📄 index.html       # Interfaz principal
-│       ├── 📄 styles.css       # Estilos CSS
-│       ├── 📄 app.js           # Lógica JavaScript
-│       ├── 📄 README.md        # Documentación del frontend
-│       └── 📄 INTERFAZ.md      # Guía de la interfaz
+│   └── 📁 services/            # Servicios de negocio
+│       └── 📄 fileService.js   # Lógica de manejo de archivos
+│
+├── 📁 Front/                   # Frontend (INTERFAZ WEB)
+│   ├── 📄 index.html           # Interfaz principal
+│   ├── 📄 styles.css           # Estilos CSS
+│   ├── 📄 app.js               # Lógica JavaScript
+│   ├── 📄 README.md            # Documentación del frontend
+│   └── 📄 INTERFAZ.md          # Guía de la interfaz
 │
 ├── 📁 serverGRPC/              # Servidor gRPC
 │   ├── 📄 server.js            # Servidor gRPC principal
@@ -123,15 +123,13 @@ Proyecto-Final-Distribuidos/
 │       ├── 📄 reReplicationService.js  # Re-replicación
 │       └── 📄 healthService.js         # Health checks
 │
-├── 📁 pruebasHTTP/             # Archivos de prueba
-│   ├── 📄 uploadFile.http      # Tests HTTP
-│   └── 📁 archivosdePrueba/    # Archivos para testing
-│       ├── 📄 test.txt
-│       ├── 📄 file.pdf
-│       ├── 📄 file2.pdf
-│       └── 📄 otro libro de prueba.pdf
-│
-└── 📁 Front/                   # (Carpeta vacía o legacy)
+└── 📁 pruebasHTTP/             # Archivos de prueba
+    ├── 📄 uploadFile.http      # Tests HTTP
+    └── 📁 archivosdePrueba/    # Archivos para testing
+        ├── 📄 test.txt
+        ├── 📄 file.pdf
+        ├── 📄 file2.pdf
+        └── 📄 otro libro de prueba.pdf
 ```
 
 ---
@@ -292,9 +290,9 @@ Frontend muestra modal con versiones
 ## 📦 Archivos Clave
 
 ### 🎨 Frontend
-- `public/index.html` - Estructura HTML completa
-- `public/styles.css` - 600+ líneas de CSS moderno
-- `public/app.js` - Lógica JavaScript de la aplicación
+- `Front/index.html` - Estructura HTML completa
+- `Front/styles.css` - 600+ líneas de CSS moderno
+- `Front/app.js` - Lógica JavaScript de la aplicación
 
 ### 🔌 API Gateway
 - `express/server.js` - Servidor Express con endpoints REST

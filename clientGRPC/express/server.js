@@ -11,8 +11,8 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Serve static files from public directory
-app.use(express.static(path.join(__dirname, '../public')));
+// Serve static files from Front directory
+app.use(express.static(path.join(__dirname, '../../Front')));
 
 // Multer en memoria (NO disco)
 const upload = multer({ storage: multer.memoryStorage() });
@@ -195,7 +195,7 @@ app.get('/files', async (req, res) => {
 
 // Serve index.html for root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../../Front/index.html'));
 });
 
 app.listen(PORT, () => {

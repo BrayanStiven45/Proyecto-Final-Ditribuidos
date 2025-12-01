@@ -110,7 +110,7 @@
 ## 📁 Archivos Modificados
 
 ### ✏️ Actualizados
-1. **`clientGRPC/public/app.js`**
+1. **`Front/app.js`**
    - Función `escapeHtml()`
    - Event listeners seguros
    - Timeout management para toasts
@@ -118,7 +118,7 @@
    - Progreso de upload mejorado
    - Mejor manejo de errores
 
-2. **`clientGRPC/public/styles.css`**
+2. **`Front/styles.css`**
    - Estados `:focus-visible`
    - Estados `:active` en botones
    - Animación `@keyframes rotate` para refresh
@@ -126,7 +126,7 @@
    - Smooth scrolling
    - Mejores transiciones
 
-3. **`clientGRPC/public/index.html`**
+3. **`Front/index.html`**
    - Meta tags mejorados (description, theme-color)
    - ARIA attributes completos
    - Preconnect a Google Fonts

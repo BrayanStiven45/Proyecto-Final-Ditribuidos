@@ -70,6 +70,17 @@ El frontend se conecta a estos endpoints:
 - `GET /versions/:fileName` - Listar versiones de un archivo
 - `GET /metadata/:fileName` - Obtener metadatos de un archivo
 
+## 📍 Ubicación
+
+Esta carpeta contiene todo el frontend del sistema:
+- `index.html` - Interfaz principal
+- `styles.css` - Estilos CSS (~32 KB)
+- `app.js` - Lógica JavaScript (~13 KB)
+- `INTERFAZ.md` - Guía detallada de características
+- `README.md` - Este archivo
+
+El servidor Express (en `clientGRPC/express/server.js`) sirve estos archivos estáticos.
+
 ## 🎨 Diseño
 
 El frontend cuenta con:
@@ -86,7 +97,7 @@ El frontend cuenta con:
 - **HTML5**: Estructura semántica
 - **CSS3**: Diseño moderno con animaciones y gradientes
 - **JavaScript Vanilla**: Sin frameworks, solo JS puro
-- **Express.js**: Servidor backend
+- **Express.js**: Servidor backend (sirve estos archivos)
 - **gRPC**: Comunicación con el servidor de archivos
 - **MinIO**: Almacenamiento distribuido
 
